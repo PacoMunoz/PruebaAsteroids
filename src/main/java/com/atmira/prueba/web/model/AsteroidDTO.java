@@ -13,7 +13,7 @@ public class AsteroidDTO {
 
     private String nombre;
     private Double diametro;
-    private Double velocidad;
+    private String velocidad;
     private String fecha;
     private String planeta;
 

@@ -1,9 +1,8 @@
 package com.atmira.prueba.web.controller;
 
+
 import com.atmira.prueba.services.NasaService;
 import com.atmira.prueba.web.model.AsteroidDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RequestMapping("api/v1/asteroids")
 @RestController
@@ -30,18 +29,16 @@ public class AsteroidController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AsteroidDTO>> getAsteroids(@RequestParam @Min(1) @Max(7) @NotBlank String days) throws JSONException, JsonProcessingException {
-        List<AsteroidDTO> result = new ArrayList<>();
-        result.add(AsteroidDTO.builder()
-                .diametro(12.12)
-                .nombre("prueba")
-                .planeta("peube")
-                .fecha("2021-12-12")
-                .velocidad(12221.1212)
-                .build());
-        // String resultString = nasaClient.getData("2021-12-09", "2021-12-12", "zdUP8ElJv1cehFM0rsZVSQN7uBVxlDnu4diHlLSb");
-        nasaService.getTopBigestPotentiallyHazardousAsteroids();
+    public ResponseEntity<List<AsteroidDTO>> getAsteroids(@RequestParam @Min(1) @Max(7) @NotBlank String days) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        String initDate = simpleDateFormat.format(new Date());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DATE, Integer.parseInt(days));
+        String endDate = simpleDateFormat.format(calendar.getTime());
+
+        return new ResponseEntity<>(nasaService.getTopBigestPotentiallyHazardousAsteroids(initDate, endDate), HttpStatus.OK);
     }
 }
