@@ -10,10 +10,10 @@ nombre: Obtenido de "name",
 
 diametro: Tamaño medio calculado
 
-velocidad: "close_approach_data:relative_velocity:kilometers_per_hour"
+velocidad: velocidad en km por horas
 
-fecha: "close_approach_data:close_approach_date"
+fecha: close_approach_date
 
-planeta: "close_approach_date:orbiting_body"
+planeta: orbiting_body
 
  
