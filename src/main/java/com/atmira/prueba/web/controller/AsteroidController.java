@@ -1,6 +1,9 @@
 package com.atmira.prueba.web.controller;
 
+import com.atmira.prueba.services.NasaService;
 import com.atmira.prueba.web.model.AsteroidDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +23,14 @@ import java.util.List;
 @Validated
 public class AsteroidController {
 
+    private NasaService nasaService;
+
+    public AsteroidController(NasaService nasaService) {
+        this.nasaService = nasaService;
+    }
+
     @GetMapping()
-    public ResponseEntity<List<AsteroidDTO>> getAsteroids(@RequestParam @Min(1) @Max(7) @NotBlank String days) {
+    public ResponseEntity<List<AsteroidDTO>> getAsteroids(@RequestParam @Min(1) @Max(7) @NotBlank String days) throws JSONException, JsonProcessingException {
         List<AsteroidDTO> result = new ArrayList<>();
         result.add(AsteroidDTO.builder()
                 .diametro(12.12)
@@ -30,6 +39,9 @@ public class AsteroidController {
                 .fecha("2021-12-12")
                 .velocidad(12221.1212)
                 .build());
+        // String resultString = nasaClient.getData("2021-12-09", "2021-12-12", "zdUP8ElJv1cehFM0rsZVSQN7uBVxlDnu4diHlLSb");
+        nasaService.getTopBigestPotentiallyHazardousAsteroids();
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
